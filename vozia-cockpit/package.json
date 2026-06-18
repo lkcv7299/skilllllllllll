@@ -1,0 +1,458 @@
+{
+  "name": "vozia-cockpit",
+  "displayName": "VozIA Cockpit",
+  "description": "Cockpit local para proyectos, handoffs y sesiones de Claude Code.",
+  "version": "0.0.1",
+  "publisher": "vozia",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:cockpit.projects",
+    "onView:cockpit.launch",
+    "onView:cockpit.handoffs",
+    "onView:cockpit.prompts",
+    "onView:cockpit.sessions",
+    "onView:cockpit.loop"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "compile": "npm run check-types && node esbuild.js",
+    "watch": "node esbuild.js --watch"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "cockpit.project.anchor",
+        "title": "Anclar carpeta...",
+        "category": "VozIA Cockpit",
+        "icon": "$(add)"
+      },
+      {
+        "command": "cockpit.project.open",
+        "title": "Abrir proyecto en ventana nueva",
+        "category": "VozIA Cockpit",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "cockpit.project.openHere",
+        "title": "Abrir Claude aquí (misma ventana)",
+        "category": "VozIA Cockpit",
+        "icon": "$(window)"
+      },
+      {
+        "command": "cockpit.reapplyClaudePatch",
+        "title": "Re-aplicar parche de Claude (Open in Folder)",
+        "category": "VozIA Cockpit",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "cockpit.project.setActive",
+        "title": "Fijar proyecto activo",
+        "category": "VozIA Cockpit",
+        "icon": "$(star-full)"
+      },
+      {
+        "command": "cockpit.project.switch",
+        "title": "Cambiar proyecto activo...",
+        "category": "VozIA Cockpit",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "cockpit.copyTemplateBlock",
+        "title": "Copiar bloque del template",
+        "category": "VozIA Cockpit",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "cockpit.startSession",
+        "title": "Iniciar sesión (handoff + template)",
+        "category": "VozIA Cockpit",
+        "icon": "$(play)"
+      },
+      {
+        "command": "cockpit.handoff.copyPath",
+        "title": "Copiar path del handoff",
+        "category": "VozIA Cockpit",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "cockpit.handoff.markUsed",
+        "title": "Marcar handoff como usado",
+        "category": "VozIA Cockpit",
+        "icon": "$(check)"
+      },
+      {
+        "command": "cockpit.handoff.markUnused",
+        "title": "Marcar handoff como nuevo",
+        "category": "VozIA Cockpit",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "cockpit.handoff.start",
+        "title": "Iniciar sesión con este handoff",
+        "category": "VozIA Cockpit",
+        "icon": "$(play)"
+      },
+      {
+        "command": "cockpit.session.reopen",
+        "title": "Reabrir sesión de Claude",
+        "category": "VozIA Cockpit",
+        "icon": "$(history)"
+      },
+      {
+        "command": "cockpit.session.toggleTag",
+        "title": "Alternar tag pending/done",
+        "category": "VozIA Cockpit",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "cockpit.session.groupByProject",
+        "title": "Agrupar sesiones por proyecto",
+        "category": "VozIA Cockpit",
+        "icon": "$(group-by-ref-type)"
+      },
+      {
+        "command": "cockpit.session.assignProject",
+        "title": "Asignar sesión a proyecto...",
+        "category": "VozIA Cockpit",
+        "icon": "$(link)"
+      },
+      {
+        "command": "cockpit.session.toggleShowAll",
+        "title": "Mostrar todas / Solo guardadas",
+        "category": "VozIA Cockpit",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "cockpit.session.saveCurrent",
+        "title": "Guardar sesión actual",
+        "category": "VozIA Cockpit",
+        "icon": "$(save)"
+      },
+      {
+        "command": "cockpit.session.saveFromTab",
+        "title": "Guardar sesión (Cockpit)",
+        "category": "VozIA Cockpit",
+        "icon": "$(save)"
+      },
+      {
+        "command": "cockpit.session.save",
+        "title": "Guardar sesión",
+        "category": "VozIA Cockpit",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "cockpit.session.unsave",
+        "title": "Quitar de guardadas",
+        "category": "VozIA Cockpit",
+        "icon": "$(star-full)"
+      },
+      {
+        "command": "cockpit.handoff.toggleArchived",
+        "title": "Mostrar/ocultar handoffs usados",
+        "category": "VozIA Cockpit",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "cockpit.prompt.copyContent",
+        "title": "Copiar prompt",
+        "category": "VozIA Cockpit",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "cockpit.prompt.copyPath",
+        "title": "Copiar path del prompt",
+        "category": "VozIA Cockpit",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "cockpit.prompt.markUsed",
+        "title": "Marcar prompt como usado",
+        "category": "VozIA Cockpit",
+        "icon": "$(check)"
+      },
+      {
+        "command": "cockpit.prompt.markUnused",
+        "title": "Marcar prompt como nuevo",
+        "category": "VozIA Cockpit",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "cockpit.prompt.toggleArchived",
+        "title": "Mostrar/ocultar prompts usados",
+        "category": "VozIA Cockpit",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "cockpit.loop.sendTest",
+        "title": "enviar prueba a la sesión activa",
+        "category": "Cockpit",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "cockpit.loop.start",
+        "title": "Iniciar loop autónomo",
+        "category": "Cockpit",
+        "icon": "$(play)"
+      },
+      {
+        "command": "cockpit.loop.startTest",
+        "title": "Loop: PRUEBA (mensajes mínimos)",
+        "category": "Cockpit",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "cockpit.loop.stop",
+        "title": "Detener loop autónomo",
+        "category": "Cockpit",
+        "icon": "$(primitive-square)"
+      },
+      {
+        "command": "cockpit.refresh",
+        "title": "Refrescar",
+        "category": "VozIA Cockpit",
+        "icon": "$(refresh)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "cockpit.project.switch",
+        "key": "ctrl+alt+shift+v",
+        "mac": "cmd+alt+shift+v"
+      },
+      {
+        "command": "cockpit.startSession",
+        "key": "ctrl+alt+shift+c",
+        "mac": "cmd+alt+shift+c"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "voziaCockpit",
+          "title": "VozIA Cockpit",
+          "icon": "media/cockpit.svg"
+        }
+      ]
+    },
+    "views": {
+      "voziaCockpit": [
+        {
+          "id": "cockpit.projects",
+          "name": "Proyectos"
+        },
+        {
+          "id": "cockpit.launch",
+          "name": "Iniciar sesión"
+        },
+        {
+          "id": "cockpit.handoffs",
+          "name": "Handoffs"
+        },
+        {
+          "id": "cockpit.prompts",
+          "name": "Prompts"
+        },
+        {
+          "id": "cockpit.sessions",
+          "name": "Sesiones (Claude)"
+        },
+        {
+          "id": "cockpit.loop",
+          "name": "Loop"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "cockpit.projects",
+        "contents": "Cargando..."
+      },
+      {
+        "view": "cockpit.launch",
+        "contents": "Cargando..."
+      },
+      {
+        "view": "cockpit.handoffs",
+        "contents": "Cargando..."
+      },
+      {
+        "view": "cockpit.prompts",
+        "contents": "Este proyecto no tiene carpeta prompts/ o no contiene archivos .md.\nAgrega prompts en prompts/**/*.md para verlos aquí."
+      },
+      {
+        "view": "cockpit.sessions",
+        "contents": "Cargando..."
+      },
+      {
+        "view": "cockpit.loop",
+        "contents": "Loop detenido. ▶ Iniciar loop para arrancar.\n[▶ Iniciar loop](command:cockpit.loop.start)"
+      }
+    ],
+    "menus": {
+      "editor/title/context": [
+        {
+          "command": "cockpit.session.saveFromTab",
+          "when": "activeWebviewPanelId == 'claudeVSCodePanel'",
+          "group": "1_cockpit@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "cockpit.project.anchor",
+          "when": "view == cockpit.projects",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cockpit.startSession",
+          "when": "view == cockpit.launch",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cockpit.session.saveCurrent",
+          "when": "view == cockpit.sessions",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cockpit.session.groupByProject",
+          "when": "view == cockpit.sessions",
+          "group": "navigation@2"
+        },
+        {
+          "command": "cockpit.session.toggleShowAll",
+          "when": "view == cockpit.sessions",
+          "group": "navigation@3"
+        },
+        {
+          "command": "cockpit.loop.sendTest",
+          "when": "view == cockpit.sessions",
+          "group": "navigation@4"
+        },
+        {
+          "command": "cockpit.handoff.toggleArchived",
+          "when": "view == cockpit.handoffs",
+          "group": "navigation@2"
+        },
+        {
+          "command": "cockpit.prompt.toggleArchived",
+          "when": "view == cockpit.prompts",
+          "group": "navigation@2"
+        },
+        {
+          "command": "cockpit.loop.start",
+          "when": "view == cockpit.loop && !cockpit.loop.running",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cockpit.loop.startTest",
+          "when": "view == cockpit.loop && !cockpit.loop.running",
+          "group": "navigation@2"
+        },
+        {
+          "command": "cockpit.loop.stop",
+          "when": "view == cockpit.loop && cockpit.loop.running",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cockpit.refresh",
+          "when": "view == cockpit.projects || view == cockpit.launch || view == cockpit.handoffs || view == cockpit.prompts || view == cockpit.sessions || view == cockpit.loop",
+          "group": "navigation@9"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cockpit.project.openHere",
+          "when": "view == cockpit.projects && viewItem == cockpit.project",
+          "group": "inline@1"
+        },
+        {
+          "command": "cockpit.project.open",
+          "when": "view == cockpit.projects && viewItem == cockpit.project",
+          "group": "inline@2"
+        },
+        {
+          "command": "cockpit.handoff.start",
+          "when": "view == cockpit.handoffs && viewItem =~ /cockpit\\.handoff/",
+          "group": "inline@1"
+        },
+        {
+          "command": "cockpit.handoff.copyPath",
+          "when": "view == cockpit.handoffs && viewItem =~ /cockpit\\.handoff/",
+          "group": "inline@2"
+        },
+        {
+          "command": "cockpit.handoff.markUsed",
+          "when": "view == cockpit.handoffs && viewItem == cockpit.handoff.new",
+          "group": "inline@3"
+        },
+        {
+          "command": "cockpit.handoff.markUnused",
+          "when": "view == cockpit.handoffs && viewItem == cockpit.handoff.used",
+          "group": "inline@3"
+        },
+        {
+          "command": "cockpit.prompt.copyContent",
+          "when": "view == cockpit.prompts && viewItem =~ /cockpit\\.prompt/",
+          "group": "inline@1"
+        },
+        {
+          "command": "cockpit.prompt.copyPath",
+          "when": "view == cockpit.prompts && viewItem =~ /cockpit\\.prompt/",
+          "group": "inline@2"
+        },
+        {
+          "command": "cockpit.prompt.markUsed",
+          "when": "view == cockpit.prompts && viewItem == cockpit.prompt.new",
+          "group": "inline@3"
+        },
+        {
+          "command": "cockpit.prompt.markUnused",
+          "when": "view == cockpit.prompts && viewItem == cockpit.prompt.used",
+          "group": "inline@3"
+        },
+        {
+          "command": "cockpit.session.save",
+          "when": "view == cockpit.sessions && viewItem =~ /cockpit\\.session\\..*\\.unsaved/",
+          "group": "inline@1"
+        },
+        {
+          "command": "cockpit.session.unsave",
+          "when": "view == cockpit.sessions && viewItem =~ /cockpit\\.session\\..*\\.saved/",
+          "group": "inline@1"
+        },
+        {
+          "command": "cockpit.session.assignProject",
+          "when": "view == cockpit.sessions && viewItem =~ /cockpit\\.session/",
+          "group": "inline@2"
+        },
+        {
+          "command": "cockpit.session.toggleTag",
+          "when": "view == cockpit.sessions && viewItem =~ /cockpit\\.session/",
+          "group": "inline@3"
+        },
+        {
+          "command": "cockpit.session.reopen",
+          "when": "view == cockpit.sessions && viewItem =~ /cockpit\\.session/",
+          "group": "inline@4"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "~1.106.0",
+    "esbuild": "^0.28.1",
+    "typescript": "^5.9.3"
+  }
+}
